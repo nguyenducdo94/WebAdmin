@@ -1,0 +1,81 @@
+<ul class="metismenu" id="side-menu">
+
+    <li class="menu-title">Quản lý phim</li>
+
+    <li>
+        <a href="/movie">
+            <i class="fe-airplay"></i>
+            <span> Phim </span>
+        </a>
+    </li>
+
+    <li class="menu-title">Quảnh lý danh mục</li>
+
+    <li>
+        <a href="/series">
+            <i class="fe-briefcase"></i>
+            <span> Phim bộ </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/category">
+            <i class="fe-map-pin"></i>
+            <span> Thể loại </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/actor">
+            <i class="fe-user"></i>
+            <span> Diễn viên </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/lang">
+            <i class="fe-navigation"></i>
+            <span> Ngôn ngữ </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/nation">
+            <i class="fe-server"></i>
+            <span> Quốc gia </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/status">
+            <i class="fe-wifi"></i>
+            <span> Tình trạng </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/publish-status">
+            <i class="fe-upload-cloud"></i>
+            <span> Trạng thái </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="/sub-type">
+            <i class="fe-youtube"></i>
+            <span> Loại sub </span>
+        </a>
+    </li>
+
+</ul>
+
+<script>
+    $(document).ready(function () {
+        var currentLocation = window.location.pathname;
+        $('#side-menu > li > a').each(function () {
+            if ($(this).attr('href') === currentLocation) {
+                $(this).addClass('active');
+            }
+        });
+    });
+</script>

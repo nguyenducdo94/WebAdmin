@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/pages.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
+    <link href="/static/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+    <!-- App css -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/app.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown"
+                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/static/images/users/no-avatar.jpg" alt="user-image" class="rounded-circle">
+                        <span class="pro-user-name ml-1">
+                            {{ current_user.username }} <i class="mdi mdi-chevron-down"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                        <a href="{{ url_for('logout') }}" class="dropdown-item notify-item">
+                            <i class="dripicons-power"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                    {% else %}
+                    <p>Bạn chưa đăng nhập.</p>
+                    {% endif %}
+
+                </li>
+            </ul>
+
+            <ul class="list-unstyled menu-left mb-0">
+
+                <li class="float-left">
+                    <button class="button-menu-mobile open-left disable-btn">
+                        <i class="fe-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left-side-menu">
+
+            <div class="slimscroll-menu">
+
+                <!-- LOGO -->
+                <a href="/" class="logo text-center mb-4">
+                    <span class="logo-lg">
+                        <img src="" alt="" height="20">
+                    </span>
+                    <span class="logo-sm">
+                        <img src="" alt="" height="24">
+                    </span>
+                </a>
+
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+
+                </div>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div id="main-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <h4 class="page-title">Tình trạng</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal"
+                                        data-target="#addcontactmodal" onclick="openAddModal()">
+                                        <i class="mdi mdi-account-plus mr-1"></i> Thêm mới</button>
+                                    <button type="button" class="btn btn-light float-right d-none d-sm-block ml-2"> <i
+                                            class="mdi mdi-format-list-bulleted"></i></button>
+                                    <button type="button" class="btn btn-light float-right"> <i
+                                            class="mdi mdi-filter-variant mr-1"></i>
+                                        Lọc</button>
+
+                                    {% if statuses %}
+                                    <table id="basic-datatable"
+                                        class="table table-hover dt-responsive nowrap table-centered">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tên</th>
+                                                <th>Thao tác</th>
+                                                <th>Ngày tạo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for status in statuses %}
+                                            <tr>
+                                                <th scope="row">{{ status[0] }}</th>
+                                                <td>
+                                                    <p class="mb-0 font-weight-medium">
+                                                        <a href="javascript: void(0);">
+                                                            {{ status[1] }}
+                                                        </a>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0);"
+                                                        onclick="openEditModal({ 'id': '{{ status[0] }}', 'name': '{{ status[1] }}'})"><i
+                                                            class="mdi mdi-pencil mr-1 text-muted"></i>Sửa</a>
+                                                    <a href="javascript:void(0);"
+                                                        onclick="openDeleteConfirmModal('{{ status[0] }}')"><i
+                                                            class="mdi mdi-delete mr-1 text-muted"></i>Xoá</a>
+                                                </td>
+                                                <td>
+                                                    {{ status[2].strftime('%Y-%m-%d %H:%M:%S') }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <p>Chưa có dữ liệu nào.</p>
+                                    {% endif %}
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end col -->
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            2023 &copy; Copyright by <a href="">Admin</a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="#">About Us</a>
+                                <a href="#">Help</a>
+                                <a href="#">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+
+    <!-- Modal Thêm Mới -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddModal()">&times;</span>
+            <h3>Thêm mới</h3>
+            <label for="add-new-name">Tên</label>
+            <input class="form-control form-control-sm" type="text" id="add-new-name">
+            <button type="button" class="btn btn-primary" onclick="addNew()">Thêm</button>
+        </div>
+    </div>
+
+    <!-- Modal Sửa -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h3>Sửa Thông Tin</h3>
+            <label for="edit-name">Tên:</label>
+            <input class="form-control form-control-sm" type="text" id="edit-name">
+            <button data-id="" id="edit-save-btn" class="btn btn-primary" onclick="saveEdit()">Lưu</button>
+        </div>
+    </div>
+
+    <!-- Modal Xoá -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <h3>Bạn có chắc chắn muốn xóa?</h3>
+            <button type="button" class="btn btn-primary" data-id="" id="delete-confirm-yes"
+                onclick="deleteConfirmed()">Có</button>
+            <button type="button" class="btn btn-primary" onclick="closeDeleteConfirmModal()">Không</button>
+        </div>
+    </div>
+
+    <!-- Vendor js -->
+    <script src="/static/js/vendor.min.js"></script>
+
+    <!-- Sparkline charts -->
+    <script src="/static/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Dashboard js -->
+    <script src="/static/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="/static/js/app.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Default Datatable
+            $('#basic-datatable').DataTable({
+                "pageLength": 8,
+                "lengthMenu": [[8, 15, 25, 50, -1], [8, 15, 25, 50, "All"]],
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='mdi mdi-chevron-left'>",
+                        "next": "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                "drawCallback": function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+                }
+            });
+
+            $('#sidebar-menu').load('/static/pages/sidebarmenu.html');
+        });
+    </script>
+
+
+    <script src="/static/libs/datatables/jquery.dataTables.min.js"></script>
+
+    <script src="/static/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="/static/js/app.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        function openEditModal(data) {
+            const myButton = document.getElementById('edit-save-btn');
+            myButton.setAttribute('data-id', data.id);
+
+            // Lấy thẻ modal "Sửa Tài khoản"
+            const editModal = document.getElementById('edit-modal');
+
+            // Lấy các trường nhập dữ liệu trong modal
+            const editName = document.getElementById('edit-name');
+
+            // Đưa thông tin tài khoản cần chỉnh sửa vào các trường nhập dữ liệu
+            editName.value = data.name;
+
+            // Hiển thị modal bằng cách đặt thuộc tính style.display thành 'block'
+            editModal.style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function openAddModal() {
+            document.getElementById('add-modal').style.display = 'block';
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').style.display = 'none';
+        }
+
+        function openDeleteConfirmModal(deleteId) {
+            document.getElementById('delete-confirm-yes').setAttribute('data-id', deleteId);
+            document.getElementById('delete-confirm-modal').style.display = 'block';
+        }
+
+        function closeDeleteConfirmModal() {
+            document.getElementById('delete-confirm-modal').style.display = 'none';
+        }
+
+        function addNew() {
+            const addType = 'status';
+            const addName = document.getElementById('add-new-name').value;
+
+            if (addName) {
+                closeAddModal()
+                // Gửi thông tin tài khoản mới đến máy chủ
+                fetch('/manager/parameter/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        add_type: addType,
+                        add_name: addName
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Kiểm tra kết quả và xử lý tương ứng
+                        if (data.success) {
+                            // Đã thêm thành công
+                            Toastify({
+                                text: data.message,
+                                duration: 3000,  // Thời gian hiển thị (3 giây)
+                                close: true,
+                                gravity: 'top',  // Vị trí hiển thị
+                                position: 'center',  // Vị trí toast
+                            }).showToast();
+
+                            // Đợi 2 giây trước khi làm mới trang
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // Xử lý lỗi (nếu có)
+                            Toastify({
+                                text: data.message + data.error,
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: 'Đã xảy ra lỗi khi thêm mới.',
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    });
+            } else {
+                Toastify({
+                    text: 'Vui lòng điền thông tin.',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'center',
+                }).showToast();
+            }
+        }
+
+        function saveEdit() {
+            const editType = 'status';
+            const editId = document.getElementById('edit-save-btn').getAttribute('data-id');
+            const editName = document.getElementById('edit-name').value;
+
+            if (editName) {
+                closeEditModal()
+
+                fetch(`/manager/parameter/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        edit_type: editType,
+                        id: editId,
+                        edit_name: editName
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Kiểm tra kết quả và xử lý tương ứng
+                        if (data.success) {
+                            // Đã cập nhật thành công
+                            Toastify({
+                                text: 'Đã cập nhật thành công.',
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+
+                            // Đợi 2 giây trước khi làm mới trang (hoặc thực hiện các hành động khác)
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // Xử lý lỗi (nếu có)
+                            Toastify({
+                                text: data.message + data.error,
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: 'Đã xảy ra lỗi khi cập nhật.',
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    });
+            } else {
+                Toastify({
+                    text: 'Vui lòng điền đầy đủ thông tin.',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'center',
+                }).showToast();
+            }
+        }
+
+        function deleteConfirmed() {
+            const deleteType = 'status';
+            const deleteId = document.getElementById('delete-confirm-yes').getAttribute('data-id');
+
+            closeDeleteConfirmModal()
+
+            fetch(`/manager/parameter/delete/${deleteType}/${deleteId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Xóa thành công
+                        Toastify({
+                            text: data.message,
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+
+                        // Đợi 2 giây trước khi làm mới trang
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: data.message + data.error,
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    Toastify({
+                        text: 'Đã xảy ra lỗi khi xoá tài khoản.',
+                        duration: 3000,
+                        close: true,
+                        gravity: 'top',
+                        position: 'center',
+                    }).showToast();
+                });
+        }
+
+        function copyText(content) {
+            const textArea = document.createElement("textarea");
+            textArea.value = content;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+    </script>
+
+</body>
+
+</html>

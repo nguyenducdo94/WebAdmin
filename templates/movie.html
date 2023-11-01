@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/pages.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
+    <link href="/static/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/static/libs/jquery-nice-select/nice-select.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/switchery/switchery.min.css" rel="stylesheet">
+    <link href="/static/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown"
+                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/static/images/users/no-avatar.jpg" alt="user-image" class="rounded-circle">
+                        <span class="pro-user-name ml-1">
+                            {{ current_user.username }} <i class="mdi mdi-chevron-down"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                        <a href="{{ url_for('logout') }}" class="dropdown-item notify-item">
+                            <i class="dripicons-power"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                    {% else %}
+                    <p>Bạn chưa đăng nhập.</p>
+                    {% endif %}
+
+                </li>
+            </ul>
+
+            <ul class="list-unstyled menu-left mb-0">
+
+                <li class="float-left">
+                    <button class="button-menu-mobile open-left disable-btn">
+                        <i class="fe-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left-side-menu">
+
+            <div class="slimscroll-menu">
+
+                <!-- LOGO -->
+                <a href="/" class="logo text-center mb-4">
+                    <span class="logo-lg">
+                        <img src="" alt="" height="20">
+                    </span>
+                    <span class="logo-sm">
+                        <img src="" alt="" height="24">
+                    </span>
+                </a>
+
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+
+                </div>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div id="main-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <h4 class="page-title">Phim</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal"
+                                        data-target="#addcontactmodal" onclick="openAddModal()">
+                                        <i class="mdi mdi-account-plus mr-1"></i> Thêm mới</button>
+                                    <button type="button" class="btn btn-light float-right d-none d-sm-block ml-2"> <i
+                                            class="mdi mdi-format-list-bulleted"></i></button>
+                                    <button type="button" class="btn btn-light float-right"> <i
+                                            class="mdi mdi-filter-variant mr-1"></i>
+                                        Lọc</button>
+
+                                    {% if movies %}
+                                    <table id="basic-datatable"
+                                        class="table table-hover dt-responsive nowrap table-centered">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tên VN</th>
+                                                <th>Tên EN</th>
+                                                <th>Tình trạng</th>
+                                                <th>Thể loại</th>
+                                                <th>Series</th>
+                                                <th>Trạng thái</th>
+                                                <th>Ngôn ngữ</th>
+                                                <th>Quốc gia</th>
+                                                <th>Thời lượng</th>
+                                                <th>Loại sub</th>
+                                                <th>Năm phát hành</th>
+                                                <th>Diễn viên</th>
+                                                <th>Source</th>
+                                                <th>Poster</th>
+                                                <th>Thao tác</th>
+                                                <th>Ngày tạo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for movie in movies %}
+                                            <tr>
+                                                <th scope="row">{{ movie[0] }}</th>
+                                                <td>
+                                                    <p class="mb-0 font-weight-medium">
+                                                        <a href="javascript: void(0);">
+                                                            {{ movie[1] }}
+                                                        </a>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    {{ movie[2] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[3] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[13] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[15] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[4] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[5] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[6] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[7] }} phút
+                                                </td>
+                                                <td>
+                                                    {{ movie[8] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[9] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[14] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[10] }}
+                                                </td>
+                                                <td>
+                                                    {{ movie[11] }}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0);"
+                                                        onclick="openEditModal({ 'id': '{{ movie[0] }}', 'name_vn': '{{ movie[1] }}', 'name_en': '{{ movie[2] }}', 'duration': '{{ movie[7] }}', 'movie_year': '{{ movie[9] }}', 'movie_src': '{{ movie[10] }}', 'movie_thumbnail': '{{ movie[11] }}'})"><i
+                                                            class="mdi mdi-pencil mr-1 text-muted"></i>Sửa</a>
+                                                    <a href="javascript:void(0);"
+                                                        onclick="openDeleteConfirmModal('{{ movie[0] }}')"><i
+                                                            class="mdi mdi-delete mr-1 text-muted"></i>Xoá</a>
+                                                </td>
+                                                <td>
+                                                    {{ movie[12].strftime('%Y-%m-%d %H:%M:%S') }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <p>Chưa có dữ liệu nào.</p>
+                                    {% endif %}
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end col -->
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            2023 &copy; Copyright by <a href="">Admin</a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="#">About Us</a>
+                                <a href="#">Help</a>
+                                <a href="#">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+
+    <!-- Modal Thêm Mới -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content" style="margin: 2% auto !important">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Nhập thông tin phim</h4>
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="name-vn">Tên phim</label>
+                            <div class="col-lg-10">
+                                <input id="name-vn" class="form-control" placeholder="Tiếng Việt">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="name-en">Tên phim Eng</label>
+                            <div class="col-lg-10">
+                                <input id="name-en" class="form-control" placeholder="Tiếng Anh">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Tình trạng</label>
+                            <div class="col-lg-10">
+                                <select id="selected-status" class="form-control">
+                                    {% for status in statuses %}
+                                    <option value="{{status[0]}}">{{ status[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Trạng thái</label>
+                            <div class="col-lg-10">
+                                <select id="selected-publish-status" class="form-control">
+                                    {% for publish_status in publish_statuses %}
+                                    <option value="{{publish_status[0]}}">{{ publish_status[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="selected-categories" class="form-group row">
+                            <label class="col-lg-2 col-form-label">Thể loại</label>
+                            <select class="select2 form-control col-lg-10 select2-multiple" data-toggle="select2"
+                                multiple="multiple" data-placeholder="Choose ...">
+                                {% for category in categories %}
+                                <option value="{{category[0]}}">{{category[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Series</label>
+                            <div class="col-lg-10">
+                                <select id="selected-series" class="form-control">
+                                    {% for series in serieses %}
+                                    <option value="{{series[0]}}">{{ series[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Ngôn ngữ</label>
+                            <div class="col-lg-10">
+                                <select id="selected-lang" class="form-control">
+                                    {% for lang in langs %}
+                                    <option value="{{lang[0]}}">{{ lang[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Quốc gia</label>
+                            <div class="col-lg-10">
+                                <select id="selected-nation" class="form-control">
+                                    {% for nation in nations %}
+                                    <option value="{{nation[0]}}">{{ nation[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-year">Thời lượng</label>
+                            <div class="col-lg-10">
+                                <input id="duration" class="form-control" placeholder="Phút">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Loại sub</label>
+                            <div class="col-lg-10">
+                                <select id="selected-sub-type" class="form-control">
+                                    {% for sub_type in sub_types %}
+                                    <option value="{{sub_type[0]}}">{{ sub_type[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-year">Công chiếu</label>
+                            <div class="col-lg-10">
+                                <input id="movie-year" class="form-control" placeholder="Năm">
+                            </div>
+                        </div>
+                        <div id="selected-actors" class="form-group row">
+                            <label class="col-lg-2 col-form-label">Diễn viên</label>
+                            <select class="select2 form-control col-lg-10 select2-multiple" data-toggle="select2"
+                                multiple="multiple" data-placeholder="Choose ...">
+                                {% for actor in actors %}
+                                <option value="{{actor[0]}}">{{actor[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-src">Source</label>
+                            <div class="col-lg-10">
+                                <input id="movie-src" class="form-control" placeholder="https://">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-thumbnail">Poster</label>
+                            <div class="col-lg-10">
+                                <input id="movie-thumbnail" class="form-control" placeholder="https://">
+                            </div>
+                        </div>
+                        <div class="form-footer-button">
+                            <button type="button" class="btn btn-primary" onclick="addNew()">Thêm</button>
+                            <button type="button" class="btn btn-primary" style="background-color: #25555C;"
+                                onclick="closeAddModal()">Đóng</button>
+                        </div>
+
+                    </form>
+
+                </div> <!-- end card-box -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+
+    <!-- Modal Sửa -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content" style="margin: 2% auto !important">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Nhập thông tin phim</h4>
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="name-vn">Tên phim</label>
+                            <div class="col-lg-10">
+                                <input id="edit-name-vn" class="form-control" placeholder="Tiếng Việt">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="name-en">Tên phim Eng</label>
+                            <div class="col-lg-10">
+                                <input id="edit-name-en" class="form-control" placeholder="Tiếng Anh">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Tình trạng</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-status" class="form-control">
+                                    {% for status in statuses %}
+                                    <option value="{{status[0]}}">{{ status[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Trạng thái</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-publish-status" class="form-control">
+                                    {% for publish_status in publish_statuses %}
+                                    <option value="{{publish_status[0]}}">{{ publish_status[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="edit-selected-categories" class="form-group row">
+                            <label class="col-lg-2 col-form-label">Thể loại</label>
+                            <select class="select2 form-control col-lg-10 select2-multiple" data-toggle="select2"
+                                multiple="multiple" data-placeholder="Choose ...">
+                                {% for category in categories %}
+                                <option value="{{category[0]}}">{{category[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Series</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-series" class="form-control">
+                                    {% for series in serieses %}
+                                    <option value="{{series[0]}}">{{ series[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Ngôn ngữ</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-lang" class="form-control">
+                                    {% for lang in langs %}
+                                    <option value="{{lang[0]}}">{{ lang[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Quốc gia</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-nation" class="form-control">
+                                    {% for nation in nations %}
+                                    <option value="{{nation[0]}}">{{ nation[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-year">Thời lượng</label>
+                            <div class="col-lg-10">
+                                <input id="edit-duration" class="form-control" placeholder="Phút">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Loại sub</label>
+                            <div class="col-lg-10">
+                                <select id="edit-selected-sub-type" class="form-control">
+                                    {% for sub_type in sub_types %}
+                                    <option value="{{sub_type[0]}}">{{ sub_type[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-year">Công chiếu</label>
+                            <div class="col-lg-10">
+                                <input id="edit-movie-year" class="form-control" placeholder="Năm">
+                            </div>
+                        </div>
+                        <div id="edit-selected-actors" class="form-group row">
+                            <label class="col-lg-2 col-form-label">Diễn viên</label>
+                            <select class="select2 form-control col-lg-10 select2-multiple" data-toggle="select2"
+                                multiple="multiple" data-placeholder="Choose ...">
+                                {% for actor in actors %}
+                                <option value="{{actor[0]}}">{{actor[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-src">Source</label>
+                            <div class="col-lg-10">
+                                <input id="edit-movie-src" class="form-control" placeholder="https://">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label" for="movie-thumbnail">Poster</label>
+                            <div class="col-lg-10">
+                                <input id="edit-movie-thumbnail" class="form-control" placeholder="https://">
+                            </div>
+                        </div>
+                        <div class="form-footer-button">
+                            <button id="edit-save-btn" data-id="" type="button" class="btn btn-primary"
+                                onclick="saveEdit()">Sửa</button>
+                            <button type="button" class="btn btn-primary" style="background-color: #25555C;"
+                                onclick="closeEditModal()">Đóng</button>
+                        </div>
+                    </form>
+
+                </div> <!-- end card-box -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+
+    <!-- Modal Xoá -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <h3>Bạn có chắc chắn muốn xóa?</h3>
+            <button type="button" class="btn btn-primary" data-id="" id="delete-confirm-yes"
+                onclick="deleteConfirmed()">Có</button>
+            <button type="button" class="btn btn-primary" onclick="closeDeleteConfirmModal()">Không</button>
+        </div>
+    </div>
+
+    <!-- Vendor js -->
+    <script src="/static/js/vendor.min.js"></script>
+
+    <!-- Sparkline charts -->
+    <script src="/static/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Dashboard js -->
+    <script src="/static/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="/static/js/app.min.js"></script>
+
+    <script src="/static/libs/jquery-nice-select/jquery.nice-select.min.js"></script>
+    <script src="/static/libs/switchery/switchery.min.js"></script>
+    <script src="/static/libs/select2/select2.min.js"></script>
+    <script src="/static/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="/static/libs/moment/moment.min.js"></script>
+    <script src="/static/libs/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Mask input -->
+    <script src="/static/libs/jquery-mask-plugin/jquery.mask.min.js"></script>
+
+    <!-- Init js-->
+    <script src="/static/js/pages/form-advanced.init.js"></script>
+
+    <script src="/static/libs/datatables/jquery.dataTables.min.js"></script>
+
+    <script src="/static/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Default Datatable
+            $('#basic-datatable').DataTable({
+                "pageLength": 8,
+                "lengthMenu": [[8, 15, 25, 50, -1], [8, 15, 25, 50, "All"]],
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='mdi mdi-chevron-left'>",
+                        "next": "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                "drawCallback": function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+                }
+            });
+
+            $('#sidebar-menu').load('/static/pages/sidebarmenu.html');
+        });
+    </script>
+
+    <script>
+        function openEditModal(data) {
+            const myButton = document.getElementById('edit-save-btn');
+            myButton.setAttribute('data-id', data.id);
+
+            // Lấy thẻ modal "Sửa Tài khoản"
+            const editModal = document.getElementById('edit-modal');
+
+            // Lấy các trường nhập dữ liệu trong modal
+            document.getElementById('edit-name-vn').value = data.name_vn;
+            document.getElementById('edit-name-en').value = data.name_en;
+            document.getElementById('edit-duration').value = data.duration;
+            document.getElementById('edit-movie-year').value = data.movie_year;
+            document.getElementById('edit-movie-src').value = data.movie_src;
+            document.getElementById('edit-movie-thumbnail').value = data.movie_thumbnail;
+
+            // Hiển thị modal bằng cách đặt thuộc tính style.display thành 'block'
+            editModal.style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function openAddModal() {
+            document.getElementById('add-modal').style.display = 'block';
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').style.display = 'none';
+        }
+
+        function openDeleteConfirmModal(deleteId) {
+            document.getElementById('delete-confirm-yes').setAttribute('data-id', deleteId);
+            document.getElementById('delete-confirm-modal').style.display = 'block';
+        }
+
+        function closeDeleteConfirmModal() {
+            document.getElementById('delete-confirm-modal').style.display = 'none';
+        }
+
+        function addNew() {
+            const add_type = 'movie';
+            const name_vn = document.getElementById('name-vn').value;
+            const name_en = document.getElementById('name-en').value;
+            const status = document.getElementById('selected-status').value;
+            const publish_status = document.getElementById('selected-publish-status').value;
+            const series = document.getElementById('selected-series').value;
+
+            const category_els = document.getElementById('selected-categories').getElementsByClassName('select2-selection__choice')
+            var myArrayCat = [];
+
+            for (var i = 0; i < category_els.length; i++) {
+                var title = category_els[i].getAttribute('title');
+                myArrayCat.push(title);
+            }
+
+            var categories = myArrayCat.join(",");
+
+
+            const actor_els = document.getElementById('selected-actors').getElementsByClassName('select2-selection__choice')
+            var myArrayAct = [];
+
+            for (var i = 0; i < actor_els.length; i++) {
+                var title = actor_els[i].getAttribute('title');
+                myArrayAct.push(title);
+            }
+
+            var actors = myArrayAct.join(",");
+
+            const lang = document.getElementById('selected-lang').value;
+            const nation = document.getElementById('selected-nation').value;
+            const duration = document.getElementById('duration').value;
+            const sub_type = document.getElementById('selected-sub-type').value;
+            const movie_year = document.getElementById('movie-year').value;
+            const movie_src = document.getElementById('movie-src').value;
+            const movie_thumbnail = document.getElementById('movie-thumbnail').value;
+
+
+            if (name_vn && name_en && status && sub_type && series && publish_status && categories && lang && nation && movie_year && actors && movie_src && movie_thumbnail) {
+                closeAddModal()
+
+                fetch('/manager/movie/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        add_type: add_type,
+                        name_vn: name_vn,
+                        name_en: name_en,
+                        status: status,
+                        publish_status: publish_status,
+                        categories: categories,
+                        series: series,
+                        lang: lang,
+                        nation: nation,
+                        duration: duration,
+                        sub_type: sub_type,
+                        movie_year: movie_year,
+                        movie_src: movie_src,
+                        movie_thumbnail: movie_thumbnail,
+                        actors: actors
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Kiểm tra kết quả và xử lý tương ứng
+                        if (data.success) {
+                            // Đã thêm thành công
+                            Toastify({
+                                text: data.message,
+                                duration: 3000,  // Thời gian hiển thị (3 giây)
+                                close: true,
+                                gravity: 'top',  // Vị trí hiển thị
+                                position: 'center',  // Vị trí toast
+                            }).showToast();
+
+                            // Đợi 2 giây trước khi làm mới trang
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // Xử lý lỗi (nếu có)
+                            Toastify({
+                                text: data.message + data.error,
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: 'Đã xảy ra lỗi khi thêm mới.',
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    });
+            } else {
+                Toastify({
+                    text: 'Vui lòng điền thông tin.',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'center',
+                }).showToast();
+            }
+        }
+
+        function saveEdit() {
+            const edit_type = 'movie';
+            const edit_id = document.getElementById('edit-save-btn').getAttribute('data-id');
+            const name_vn = document.getElementById('edit-name-vn').value;
+            const name_en = document.getElementById('edit-name-en').value;
+            const status = document.getElementById('edit-selected-status').value;
+            const publish_status = document.getElementById('edit-selected-publish-status').value;
+            const series = document.getElementById('edit-selected-series').value;
+
+            const category_els = document.getElementById('edit-selected-categories').getElementsByClassName('select2-selection__choice')
+            var myArray = [];
+
+            for (var i = 0; i < category_els.length; i++) {
+                var title = category_els[i].getAttribute('title');
+                myArray.push(title);
+            }
+
+            var categories = myArray.join(",");
+
+            const actor_els = document.getElementById('edit-selected-actors').getElementsByClassName('select2-selection__choice')
+            var myArrayAct = [];
+
+            for (var i = 0; i < actor_els.length; i++) {
+                var title = actor_els[i].getAttribute('title');
+                myArrayAct.push(title);
+            }
+
+            var actors = myArrayAct.join(",");
+
+            const lang = document.getElementById('edit-selected-lang').value;
+            const nation = document.getElementById('edit-selected-nation').value;
+            const duration = document.getElementById('edit-duration').value;
+            const sub_type = document.getElementById('edit-selected-sub-type').value;
+            const movie_year = document.getElementById('edit-movie-year').value;
+            const movie_src = document.getElementById('edit-movie-src').value;
+            const movie_thumbnail = document.getElementById('edit-movie-thumbnail').value;
+
+            if (edit_id && name_vn && name_en && status && publish_status && series && categories && lang && nation && movie_year && movie_src && movie_thumbnail && sub_type && actors) {
+                closeEditModal()
+
+                fetch(`/manager/movie/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        edit_type: edit_type,
+                        edit_id: edit_id,
+                        name_vn: name_vn,
+                        name_en: name_en,
+                        status: status,
+                        publish_status: publish_status,
+                        categories: categories,
+                        series: series,
+                        lang: lang,
+                        nation: nation,
+                        duration: duration,
+                        sub_type: sub_type,
+                        movie_year: movie_year,
+                        movie_src: movie_src,
+                        movie_thumbnail: movie_thumbnail,
+                        actors: actors
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Kiểm tra kết quả và xử lý tương ứng
+                        if (data.success) {
+                            // Đã cập nhật thành công
+                            Toastify({
+                                text: 'Đã cập nhật thành công.',
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+
+                            // Đợi 2 giây trước khi làm mới trang (hoặc thực hiện các hành động khác)
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // Xử lý lỗi (nếu có)
+                            Toastify({
+                                text: data.message + data.error,
+                                duration: 3000,
+                                close: true,
+                                gravity: 'top',
+                                position: 'center',
+                            }).showToast();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: 'Đã xảy ra lỗi khi cập nhật.',
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    });
+            } else {
+                Toastify({
+                    text: 'Vui lòng điền đầy đủ thông tin.',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'center',
+                }).showToast();
+            }
+        }
+
+        function deleteConfirmed() {
+            const deleteType = 'movie';
+            const deleteId = document.getElementById('delete-confirm-yes').getAttribute('data-id');
+
+            closeDeleteConfirmModal()
+
+            fetch(`/manager/parameter/delete/${deleteType}/${deleteId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Xóa thành công
+                        Toastify({
+                            text: data.message,
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+
+                        // Đợi 2 giây trước khi làm mới trang
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        console.error('Lỗi:', error);
+                        Toastify({
+                            text: data.message + data.error,
+                            duration: 3000,
+                            close: true,
+                            gravity: 'top',
+                            position: 'center',
+                        }).showToast();
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    Toastify({
+                        text: 'Đã xảy ra lỗi khi xoá tài khoản.',
+                        duration: 3000,
+                        close: true,
+                        gravity: 'top',
+                        position: 'center',
+                    }).showToast();
+                });
+        }
+
+        function copyText(content) {
+            const textArea = document.createElement("textarea");
+            textArea.value = content;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+    </script>
+
+</body>
+
+</html>
